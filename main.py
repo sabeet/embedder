@@ -15,10 +15,10 @@ intents.message_content = True
 client = discord.Client(intents=intents)
 
 url_map = {
-    "tiktok.com": "www.vxtiktok.com",
-    "instagram.com": "www.kkinstagram.com",
-    "x.com": "www.fxtwitter.com",
-    "twitter.com": "www.fxtwitter.com",
+    "tiktok.com": "vxtiktok.com",
+    "instagram.com": "kkinstagram.com",
+    "x.com": "fxtwitter.com",
+    "twitter.com": "fxtwitter.com",
 }
 
 @client.event
