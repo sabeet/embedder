@@ -14,26 +14,16 @@ intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
+url_map = {
+    "tiktok.com": "vxtiktok.com",
+    "instagram.com": "kkinstagram.com",
+    "x.com": "fxtwitter.com",
+    "twitter.com": "fxtwitter.com"
+}
 
 @client.event
 async def on_ready():
     print('Embedder is now running')
-
-
-def is_tiktok_url(url):
-    netloc = urlparse(url).netloc.lower()
-    return netloc in ["tiktok.com"] or netloc.startswith("www.tiktok.com")
-
-
-def is_instagram_url(url):
-    netloc = urlparse(url).netloc.lower()
-    return netloc in ["instagram.com"] or netloc.startswith("www.instagram.com")
-
-
-def is_twitter_url(url):
-    netloc = urlparse(url).netloc.lower()
-    return netloc in ["x.com", "twitter.com"] or netloc.startswith("www.x.com") or netloc.startswith("www.twitter.com")
-
 
 def extract_urls(text):
     # Extract URLs from text using regex to handle markdown and other formatting
@@ -51,18 +41,9 @@ async def on_message(message):
     urls_found = []
 
     for url in urls_in_message:
-        if is_tiktok_url(url):
-            updated_url = url.replace("tiktok.com", "vxtiktok.com")
-            urls_found.append(updated_url)
-        elif is_instagram_url(url):
-            updated_url = url.replace("instagram.com", "kkinstagram.com")
-            urls_found.append(updated_url)
-        elif is_twitter_url(url):
-            if "x.com" in url:
-                updated_url = url.replace("x.com", "fxtwitter.com")
-                urls_found.append(updated_url)
-            elif "twitter.com" in url:
-                updated_url = url.replace("twitter.com", "fxtwitter.com")
+        for oldUrl, newUrl in url_map.items():
+            if oldUrl in urlparse(url).netloc.lower():
+                updated_url = url.replace(oldUrl, newUrl)
                 urls_found.append(updated_url)
 
     if urls_found:
