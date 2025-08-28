@@ -56,7 +56,7 @@ A Discord bot that automatically converts social media links to their embeddable
 
 4. **Run the bot**
    ```bash
-   python bot.py
+   python main.py
    ```
 
 ## Requirements
