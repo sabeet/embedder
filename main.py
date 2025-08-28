@@ -41,7 +41,7 @@ async def on_message(message):
     urls_found = []
 
     for url in urls_in_message:
-        for url, newUrl in url_map():
+        for url, newUrl in url_map.items():
             if url in urlparse(text).netloc.lower():
                 updated_url = url.replace(url, newUrl)
                 urls_found.append(updated_url)
