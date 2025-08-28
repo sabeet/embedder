@@ -18,7 +18,7 @@ url_map = {
     "tiktok.com": "vxtiktok.com",
     "instagram.com": "kkinstagram.com",
     "x.com": "fxtwitter.com",
-    "twitter.com": "fxtwitter.com"
+    "twitter.com": "fxtwitter.com",
 }
 
 @client.event
@@ -42,7 +42,8 @@ async def on_message(message):
 
     for url in urls_in_message:
         for oldUrl, newUrl in url_map.items():
-            if oldUrl in urlparse(url).netloc.lower():
+            netloc = urlparse(url).netloc.lower()
+            if netloc in oldUrl or netloc.startswith("www." + oldUrl): 
                 updated_url = url.replace(oldUrl, newUrl)
                 urls_found.append(updated_url)
 
