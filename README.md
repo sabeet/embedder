@@ -51,7 +51,7 @@ A Discord bot that automatically converts social media links to their embeddable
 3. **Environment Configuration**
    Create a `.env` file in the project root:
    ```env
-   TOKEN=your_discord_bot_token_here
+   echo "TOKEN=your_discord_bot_token_here" > .env
    ```
 
 4. **Run the bot**
