@@ -1,8 +1,7 @@
 import os
 import nest_asyncio
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlunparse
 import discord
-import re
 from dotenv import load_dotenv
 
 nest_asyncio.apply()
@@ -25,10 +24,17 @@ url_map = {
 async def on_ready():
     print('Embedder is now running')
 
+# Extract URLs using urlparse and checking if there is a scheme and netloc
 def extract_urls(text):
-    # Extract URLs from text using regex to handle markdown and other formatting
-    url_pattern = r'https?://(?:[-\w.])+(?:[:\d]+)?(?:/(?:[\w/_.])*(?:\?(?:[\w&=%.])*)?(?:#(?:[\w.])*)?)?'
-    return re.findall(url_pattern, text)
+    urls = []
+    split_text = text.split()
+
+    for t in split_text:
+        parsed = urlparse(t)
+        if parsed.scheme and parsed.netloc:
+            urls.append(urlunparse(parsed))
+
+    return urls
 
 
 @client.event
@@ -36,7 +42,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    # Extract URLs using regex instead of splitting by spaces
+    
     urls_in_message = extract_urls(message.content)
     urls_found = []
 
