@@ -32,7 +32,7 @@ def extract_urls(text):
     for t in split_text:
         parsed = urlparse(t)
         if parsed.scheme and parsed.netloc:
-            urls.append(urlunparse(parsed))
+            urls.append(t)
 
     return urls
 
