@@ -7,7 +7,7 @@ A Discord bot that automatically converts social media links to their embeddable
 - **Automatic Link Conversion**: Detects social media links in messages and converts them to embeddable formats
 - **Embed Suppression**: Removes the original non-embeddable previews to keep chat clean
 - **Multi-Platform Support**: Currently supports TikTok, Instagram, and Twitter/X links
-- **Smart URL Detection**: Uses regex to find URLs even within markdown formatting and other text
+- **Smart URL Detection**: Uses Python's built-in URL parsing library to find URLs even within markdown formatting and other text
 
 ## Supported Platforms
 
