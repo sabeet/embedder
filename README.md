@@ -39,7 +39,7 @@ A Discord bot that automatically converts social media links to their embeddable
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/sabeet/embedder.git
    cd discord-video-embedder
    ```
 
