@@ -8,6 +8,7 @@ A Discord bot that automatically converts social media links to their embeddable
 - **Embed Suppression**: Removes the original non-embeddable previews to keep chat clean
 - **Multi-Platform Support**: Currently supports TikTok, Instagram, and Twitter/X links
 - **Smart URL Detection**: Uses Python's built-in URL parsing library to find URLs even within markdown formatting and other text
+- **Docker Support**: Easy deployment with Docker and Docker Compose
 
 ## Supported Platforms
 
@@ -20,7 +21,7 @@ A Discord bot that automatically converts social media links to their embeddable
 ## How It Works
 
 1. **Detection**: The bot monitors all messages in channels it has access to
-2. **URL Extraction**: Uses regex pattern matching to find social media URLs in messages
+2. **URL Extraction**: Uses URL parsing to find social media URLs in messages
 3. **Conversion**: Replaces the original domains with embeddable alternatives:
    - `tiktok.com` → `vxtiktok.com`
    - `instagram.com` → `kkinstagram.com`
@@ -32,15 +33,58 @@ A Discord bot that automatically converts social media links to their embeddable
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- A Discord bot token
+- Python 3.8 or higher OR Docker
+- A Discord bot token ([Get one here](https://discord.com/developers/applications))
 
-### Setup
+### Option 1: Docker Deployment (Recommended)
 
 1. **Clone the repository**
    ```bash
    git clone https://github.com/sabeet/embedder.git
-   cd discord-video-embedder
+   cd embedder
+   ```
+
+2. **Create environment file**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` and add your Discord bot token:
+   ```env
+   TOKEN=your_discord_bot_token_here
+   ```
+
+3. **Run with Docker Compose**
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **View logs**
+   ```bash
+   docker-compose logs -f
+   ```
+
+5. **Stop the bot**
+   ```bash
+   docker-compose down
+   ```
+
+### Option 2: Manual Docker Commands
+
+```bash
+# Build the image
+docker build -t embedder .
+
+# Run the container
+docker run -d --name embedder-bot -e TOKEN="your_token_here" embedder
+```
+
+### Option 3: Python (Local Development)
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/sabeet/embedder.git
+   cd embedder
    ```
 
 2. **Install dependencies**
@@ -48,10 +92,16 @@ A Discord bot that automatically converts social media links to their embeddable
    pip install -r requirements.txt
    ```
 
-3. **Environment Configuration**
-   Create a `.env` file in the project root:
-   ```env
-   echo "TOKEN=your_discord_bot_token_here" > .env
+3. **Set environment variable**
+   
+   **Linux/Mac:**
+   ```bash
+   export TOKEN="your_discord_bot_token_here"
+   ```
+   
+   **Windows (PowerShell):**
+   ```powershell
+   $env:TOKEN="your_discord_bot_token_here"
    ```
 
 4. **Run the bot**
@@ -59,12 +109,37 @@ A Discord bot that automatically converts social media links to their embeddable
    python main.py
    ```
 
+## Portainer Deployment
+
+For deployment to Portainer as a stack:
+
+1. Copy the contents of `docker-compose.yml`
+2. Create a new stack in Portainer
+3. Paste the compose file
+4. Add environment variable:
+   - Name: `TOKEN`
+   - Value: `your_discord_bot_token_here`
+5. Deploy the stack
+
+Alternatively, pull the pre-built image from Docker Hub:
+
+```yaml
+version: '3.8'
+
+services:
+  embedder:
+    image: sabeet/embedder:latest
+    container_name: embedder-bot
+    restart: unless-stopped
+    environment:
+      - TOKEN=${TOKEN} # You must get a discord bot token from the Discord Developer Portal
+```
+
 ## Requirements
 
 The bot requires the following Python packages (see `requirements.txt`):
 
 - `discord.py` - Discord API wrapper
-- `python-dotenv` - Environment variable management
 - `nest_asyncio` - Asyncio compatibility for nested event loops
 
 ## Bot Permissions
@@ -73,7 +148,7 @@ The bot requires the following Discord permissions:
 
 - **Read Messages** - To detect URLs in chat
 - **Send Messages** - To reply with converted links
-- **Manage Messages** - To suppress original embeds (optional)
+- **Manage Messages** - To suppress original embeds (optional but recommended)
 
 ## Configuration
 
@@ -87,7 +162,7 @@ The bot requires the following Discord permissions:
 
 The bot uses the following Discord intents:
 - Default intents
-- Message content intent (to read message text)
+- Message content intent (must be enabled in Discord Developer Portal)
 
 ## Usage
 
@@ -111,11 +186,24 @@ https://vxtiktok.com/@user/video/1234567890
 
 The converted link will show a proper video embed that can be played directly in Discord.
 
+## Docker Hub
+
+Pre-built images are available on Docker Hub:
+```bash
+docker pull sabeet/embedder:latest
+```
+
 ## Error Handling
 
 - **Permission Errors**: If the bot lacks permission to suppress embeds, it will log the error but continue functioning
 - **HTTP Exceptions**: Network-related errors are caught and logged
 - **Invalid URLs**: Non-matching URLs are ignored without errors
+
+## Troubleshooting
+
+- **Bot not responding**: Ensure the Message Content intent is enabled in Discord Developer Portal
+- **TOKEN not set error**: Verify your environment variable is properly configured
+- **Permission errors**: Grant the bot "Manage Messages" permission in your server
 
 ## Contributing
 
